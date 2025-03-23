@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':preis', $preis);
 
     $stmt->execute();
+
+    header("LOCATION: ./index.php");
 }
 ?>
 
@@ -40,6 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Add Ski</button>
         </form>
     </div>
-    <a href="../skiverleih.php" class="back-btn">Back</a>
+    <a href="index.php" class="back-btn">Back</a>
     </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "/DBConnect/DBConnect.php";
+require __DIR__ . "/../DBConnect/DBconnect.php";
 
 // execute prepare with SQL-statement
 $stmt = $pdo->prepare("SELECT * FROM skier");
@@ -17,9 +17,9 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Simple Table</title>
+        <title>Skier</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="../styles/styles.css">
     </head>
 
     <body>
@@ -40,12 +40,12 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?php echo $row['ID']; ?></td>
                 <td><?php echo $row['hersteller']; ?></td>
                 <td><?php echo $row['preis']; ?></td>
-                <td><a href="skier/edit.php?id=<?php echo $row['ID']; ?>" class="btn edit_btn">Bearbeiten</a></td>
-                <td><a href="skier/delete.php?id=<?php echo $row['ID']; ?>" class="btn delete_btn">Löschen</a></td>
+                <td><a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn edit_btn">Bearbeiten</a></td>
+                <td><a href="delete.php?id=<?php echo $row['ID']; ?>" class="btn delete_btn">Löschen</a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
     </table>
-    <a href="skier/insert.php" class="add_ski_btn">Ski hinzufügen</a>
+    <a href="insert.php" class="add_ski_btn">Ski hinzufügen</a>
     </body>
 </html>

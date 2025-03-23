@@ -5,7 +5,7 @@ require __DIR__ . "/../DBConnect/DBconnect.php";
 if (isset($_GET['id'])) {
     $id = (int) $_GET['id'];
 
-    $stmt = $pdo->prepare("SELECT * FROM skier WHERE id=:id");
+    $stmt = $pdo->prepare("SELECT * FROM verleih WHERE id=:id");
 
     $stmt->bindParam(":id", $id);
     $stmt->execute();
@@ -15,14 +15,14 @@ if (isset($_GET['id'])) {
         $hersteller = $_POST["hersteller"];
         $preis = $_POST["preis"];
 
-        $stmt2 = $pdo->prepare("UPDATE skier SET `hersteller` = :hersteller, `preis` = :preis WHERE `ID` = :id");
+        $stmt2 = $pdo->prepare("UPDATE verleih SET leihbeginn=:leihbeginn, leihdauer_Tage=:leihdauer_Tage,  WHERE `ID` = :id");
 
         $stmt2->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt2->bindParam(':hersteller', $hersteller, PDO::PARAM_STR);
         $stmt2->bindParam(':preis', $preis, PDO::PARAM_INT);
         $stmt2->execute();
 
-        header("LOCATION: ./skiverleih.php");
+        header("LOCATION: ./index.php");
     }
 }
 
@@ -52,6 +52,6 @@ if (isset($_GET['id'])) {
             <button type="submit">Update Ski</button>
         </form>
     </div>
-    <a href="../skiverleih.php" class="back-btn">Back</a>
+    <a href="index.php" class="back-btn">Back</a>
     </body>
 </html>
