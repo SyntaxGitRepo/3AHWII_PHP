@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bewertung = $_POST["bewertung"];
 
     // execute prepare with SQL-statement
-    $stmt = $pdo->prepare("insert into film (titel, erscheinungsjahr, regisseur_id, bewertung) VALUES (:titel, :erscheinungsjahr, :regisseur_id, :bewertung)");
+    $stmt = $pdo->prepare("insert into film(titel, erscheinungsjahr, regisseur_id, bewertung) VALUES (:titel, :erscheinungsjahr, :regisseur_id, :bewertung)");
 
     $stmt->bindParam(':titel', $titel);
     $stmt->bindParam(':erscheinungsjahr', $erscheinungjahr);
@@ -51,7 +51,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="number" id="bewertung" name="bewertung"  required>
 
                 <label for="regisseur">Regisseur:</label>
-                <input type="text" id="regisseur" name="regisseur" required>
+                <select class="select" name="regisseur" id="regisseur">
+                    <?php foreach ($regisseurs as $regisseur):?>
+                        <option class="option" value="">- Bitte Auswählen - </option>
+                        <hr>
+                        <option value="<?php echo $regisseur['name'];?>"><?php echo $regisseur['name'];?></option>
+                    <?php endforeach?>
+                </select>
+
+                <div>
+                    <label>Speaker name:</label>
+                    <multi-input>
+                        <input list="speakers">
+                        <datalist id="speakers">
+
+                        </datalist>
+                    </multi-input>
+                </div>
 
                 <label for="">Genre:</label>
                 <input type="" id="" name=""  required>
@@ -60,9 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
         <a href="index.php" class="back-btn">Back</a>
-        <script src="autocomplete.js">
-            <?php echo 'autocomplete();'?>
-        </script>
-
     </body>
+    <script src="multi-input.js"></script>
+    <script src="script.js"></script>
 </html>

@@ -52,7 +52,8 @@ tr:hover {
     margin: 10px 0 5px;
 }
 
-.form-container input {
+.form-container input, select {
+    box-sizing: border-box;
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -61,12 +62,11 @@ tr:hover {
     font-size: 16px;
 }
 
-.select_1 {
-    width: 100%;
+.select {
     padding: 10px;
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
     color: #333;
@@ -75,21 +75,16 @@ tr:hover {
     transition: border-color 0.3s ease-in-out;
 }
 
-.select_1:focus {
-    border-color: #007BFF;
-}
-
-.option_1 {
+.option {
     font-size: 16px;
     background-color: #fff;
     color: #333;
     padding: 5px;
 }
 
-.option_1:hover {
+.option:hover {
     background-color: #f0f0f0;
 }
-
 
 .form-container button {
     display: block;
