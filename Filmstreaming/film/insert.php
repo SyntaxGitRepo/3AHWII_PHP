@@ -5,7 +5,13 @@ $stmt2 = $pdo->prepare("SELECT * FROM regisseur");
 $stmt2->execute();
 $regisseurs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
+$stmt3 = $pdo->prepare("SELECT * FROM genre");
+$stmt3->execute();
+$genres = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    var_dump($_POST);
+
     $titel = $_POST["titel"];
     $erscheinungjahr = $_POST["erscheinungjahr"];
     $regisseur_id = $_POST["regisseur_id"];
@@ -19,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':regisseur_id', $regisseur_id);
     $stmt->bindParam(':bewertung', $bewertung);
 
-    $stmt->execute();
+    #$stmt->execute();
 
-    header("LOCATION: ./index.php");
+    #header("LOCATION: ./index.php");
 }
 ?>
 
@@ -52,25 +58,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <label for="regisseur">Regisseur:</label>
                 <select class="select" name="regisseur" id="regisseur">
+                    <option class="option" value="">- Bitte Auswählen - </option>
+                    <hr>
                     <?php foreach ($regisseurs as $regisseur):?>
-                        <option class="option" value="">- Bitte Auswählen - </option>
-                        <hr>
                         <option value="<?php echo $regisseur['name'];?>"><?php echo $regisseur['name'];?></option>
                     <?php endforeach?>
                 </select>
 
-                <div>
-                    <label>Speaker name:</label>
-                    <multi-input>
-                        <input list="speakers">
-                        <datalist id="speakers">
-
-                        </datalist>
-                    </multi-input>
-                </div>
-
-                <label for="">Genre:</label>
-                <input type="" id="" name=""  required>
+                <label>Genre:</label>
+                <multi-input name="genre" id="genre">
+                    <input list="speakers">
+                    <datalist id="speakers">
+                        <?php foreach ($genres as $genre):?>
+                            <option value="<?php echo $genre['name']; ?>"><?php echo $genre['name']; ?></option>
+                        <?php endforeach;?>
+                    </datalist>
+                </multi-input>
 
                 <button type="submit">Add Film</button>
             </form>
@@ -78,5 +81,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="index.php" class="back-btn">Back</a>
     </body>
     <script src="multi-input.js"></script>
-    <script src="script.js"></script>
 </html>
