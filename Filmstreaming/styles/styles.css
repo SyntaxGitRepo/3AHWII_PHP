@@ -52,7 +52,7 @@ tr:hover {
     margin: 10px 0 5px;
 }
 
-.form-container input, select {
+.form-container input, select, multi-input, genre-selector {
     box-sizing: border-box;
     width: 100%;
     padding: 10px;
@@ -60,6 +60,52 @@ tr:hover {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
+}
+
+genre-selector {
+    display: flex;
+    border: none;
+    padding: 0;
+    flex-direction: column;
+    position: relative;
+}
+
+genre-selector option {
+    display: none;
+    visibility: hidden;
+    height: 0;
+}
+
+.genre-selected-div {
+    display: flex;
+    width: 100%;
+    height: 25px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.auto-fill-div {
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    right: 0;
+    top: 70px;
+    height: 100px;
+    position: absolute;
+    background-color: #f9f9f9;
+}
+
+.auto-fill-div div {
+    display: flex;
+    left: 0;
+    right: 0;
+    height: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.auto-fill-div div:hover {
+    background-color: #f1f1f1;
 }
 
 .select {

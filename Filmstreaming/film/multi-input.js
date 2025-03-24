@@ -6,56 +6,56 @@ class MultiInput extends HTMLElement {
         // ::slotted() with ::after doesn't work in Safari.
         this.innerHTML +=
             `<style>
-            multi-input input::-webkit-calendar-picker-indicator {
-              display: none;
-            }
-            /* NB use of pointer-events to only allow events from the × icon */
-            multi-input div.item::after {
-              color: black;
-              content: '×';
-              cursor: pointer;
-              font-size: 18px;
-              pointer-events: auto;
-              position: absolute;
-              right: 5px;
-              top: -1px;
-            }
-        
+                multi-input input::-webkit-calendar-picker-indicator {
+                  display: none;
+                }
+                /* NB use of pointer-events to only allow events from the × icon */
+                multi-input div.item::after {
+                  color: black;
+                  content: '×';
+                  cursor: pointer;
+                  font-size: 18px;
+                  pointer-events: auto;
+                  position: absolute;
+                  right: 5px;
+                  top: -1px;
+                }
             </style>`;
-                this._shadowRoot = this.attachShadow({mode: 'open'});
-                this._shadowRoot.innerHTML =
-                    `<style>
-            :host {
-              border: var(--multi-input-border, 1px solid #ddd);
-              display: block;
-              overflow: hidden;
-              padding: 5px;
-            }
-            /* NB use of pointer-events to only allow events from the × icon */
-            ::slotted(div.item) {
-              background-color: var(--multi-input-item-bg-color, #dedede);
-              border: var(--multi-input-item-border, 1px solid #ccc);
-              border-radius: 2px;
-              color: #222;
-              display: inline-block;
-              font-size: var(--multi-input-item-font-size, 14px);
-              margin: 5px;
-              padding: 2px 25px 2px 5px;
-              pointer-events: none;
-              position: relative;
-              top: -1px;
-            }
-            /* NB pointer-events: none above */
-            ::slotted(div.item:hover) {
-              background-color: #eee;
-              color: black;
-            }
-            ::slotted(input) {
-              border: none;
-              font-size: var(--multi-input-input-font-size, 14px);
-              outline: none;
-              padding: 10px 10px 10px 5px; 
-            }
+
+        this._shadowRoot = this.attachShadow({mode: 'open'});
+        this._shadowRoot.innerHTML =
+            `<style>
+                :host {
+                  border: var(--multi-input-border, 1px solid #ddd);
+                  display: block;
+                  overflow: hidden;
+                  padding: 5px;
+                }
+                /* NB use of pointer-events to only allow events from the × icon */
+                ::slotted(div.item) {
+                  background-color: var(--multi-input-item-bg-color, #dedede);
+                  border: var(--multi-input-item-border, 1px solid #ccc);
+                  border-radius: 2px;
+                  color: #222;
+                  display: inline-block;
+                  font-size: var(--multi-input-item-font-size, 14px);
+                  margin: 5px;
+                  padding: 2px 25px 2px 5px;
+                  pointer-events: none;
+                  position: relative;
+                  top: -1px;
+                }
+                /* NB pointer-events: none above */
+                ::slotted(div.item:hover) {
+                  background-color: #eee;
+                  color: black;
+                }
+                ::slotted(input) {
+                  border: none;
+                  font-size: var(--multi-input-input-font-size, 14px);
+                  outline: none;
+                  padding: 10px 10px 10px 5px; 
+                }
             </style>
             <slot></slot>`;
 
@@ -173,7 +173,6 @@ class MultiInput extends HTMLElement {
         if (name === 'value') {
             this.input.value = newValue;
         }
-        if (name === '')
     }
 }
 

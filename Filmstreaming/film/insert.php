@@ -75,10 +75,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </datalist>
                 </multi-input>
 
+                <label>Genre:</label>
+                <genre-selector>
+                    <?php foreach ($genres as $genre):?>
+                        <option value="<?php echo $genre['name']; ?>"></option>
+                    <?php endforeach;?>
+                </genre-selector>
+
                 <button type="submit">Add Film</button>
             </form>
         </div>
         <a href="index.php" class="back-btn">Back</a>
     </body>
     <script src="multi-input.js"></script>
+    <script src="genre_selector.js"></script>
 </html>
