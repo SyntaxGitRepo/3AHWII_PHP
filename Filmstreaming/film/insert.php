@@ -66,16 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
 
                 <label>Genre:</label>
-                <multi-input name="genre" id="genre">
-                    <input list="speakers">
-                    <datalist id="speakers">
-                        <?php foreach ($genres as $genre):?>
-                            <option value="<?php echo $genre['name']; ?>"><?php echo $genre['name']; ?></option>
-                        <?php endforeach;?>
-                    </datalist>
-                </multi-input>
-
-                <label>Genre:</label>
                 <genre-selector>
                     <?php foreach ($genres as $genre):?>
                         <option value="<?php echo $genre['name']; ?>"></option>

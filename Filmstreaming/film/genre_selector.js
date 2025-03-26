@@ -18,9 +18,10 @@ class Genre_selector extends HTMLElement {
         this.auto_fill_div = document.createElement('div');
         this.auto_fill_div.className = 'auto-fill-div';
         this.auto_fill_div.style.visibility = 'hidden';
+        this.auto_fill_div.id = "auto-fill-div";
         this.appendChild(this.auto_fill_div);
 
-
+        this.activeDivIndex = 0;
 
         this.input.addEventListener('input', (event) => {
             this.auto_fill_div.style.visibility = 'visible';
@@ -30,28 +31,43 @@ class Genre_selector extends HTMLElement {
 
             let children = this._getOptionChildren();
             for (let i = 0; i < children.length; i++) {
-                console.log(children[i].value.substring(0, inputText.length).toLowerCase())
-
                 if (children[i].value.substring(0, inputText.length).toLowerCase() === inputText.toLowerCase()) {
-                    console.log(children[i].value.substring(0, inputText.length).toLowerCase())
                     let div = document.createElement('div');
                     div.innerHTML = children[i].value;
+
+                    div.addEventListener('click', (event) => {
+                        let selectedDiv = document.createElement('div');
+                        selectedDiv.innerHTML = children[i].value;
+                        this.selected_div.appendChild(selectedDiv);
+
+                        selectedDiv.addEventListener('click', (e) => {
+                            this.selected_div.removeChild(selectedDiv);
+                        });
+
+                        this.hideAutoFillDiv();
+                        this.input.value = "";
+                    });
 
                     this.auto_fill_div.appendChild(div);
                 }
 
-                if (i >= 4) break
+                if (i >= 6) break
             }
 
-            if (children.length > 5) this.auto_fill_div.style.height = "125px";
-            else this.auto_fill_div.style.height = children.length * 25 + "px";
+            if (this.auto_fill_div.children.length > 7) this.auto_fill_div.style.height = "175px";
+            else this.auto_fill_div.style.height = this.auto_fill_div.children.length * 25 + "px";
         });
 
-        this.input.addEventListener('focusout', (event) => {
-            this.auto_fill_div.style.visibility = 'hidden';
+        this.input.addEventListener('keydown', (e) => {
 
-            this.auto_fill_div.innerHTML = "";
-        })
+            if (e.key === "ArrowUp") {
+                this.activeDivIndex--;
+            }
+            if (e.key === "ArrowDown") {
+                this.activeDivIndex++;
+            }
+//            this.auto_fill_div.children[this.activeDivIndex].className += "active";
+        });
     }
 
     _getOptionChildren() {
@@ -66,7 +82,16 @@ class Genre_selector extends HTMLElement {
 
         return children
     }
+
+    hideAutoFillDiv() {
+        this.auto_fill_div.style.visibility = "hidden";
+        this.auto_fill_div.innerHTML = "";
+    }
 }
 
-customElements.define('genre-selector', Genre_selector);
+document.addEventListener('click', (event) => {
+    document.getElementById("auto-fill-div").style.visibility = "hidden";
+    document.getElementById("auto-fill-div").innerHTML = "";
+});
 
+customElements.define('genre-selector', Genre_selector);

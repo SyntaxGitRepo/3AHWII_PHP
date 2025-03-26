@@ -79,8 +79,7 @@ genre-selector option {
 .genre-selected-div {
     display: flex;
     width: 100%;
-    height: 25px;
-    border: 1px solid #ddd;
+    height: 35px;
     border-radius: 5px;
 }
 
@@ -109,6 +108,20 @@ genre-selector option {
 
 .auto-fill-div div:hover {
     background-color: #a3a3a3;
+}
+
+.auto-fill-div div .active {
+    background-color: #984bff;
+}
+
+.genre-selected-div div {
+    font-size: 15px;
+    margin: 5px;
+    padding: 3px;
+    border: solid 1px #ddd;
+    border-radius: 3px;
+    background-color: #a3a3a3;
+    cursor: pointer;
 }
 
 .select {
