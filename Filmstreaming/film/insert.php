@@ -10,24 +10,35 @@ $stmt3->execute();
 $genres = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    var_dump($_POST);
-
     $titel = $_POST["titel"];
-    $erscheinungjahr = $_POST["erscheinungjahr"];
-    $regisseur_id = $_POST["regisseur_id"];
+    $erscheinungjahr = $_POST["Erscheinungsjahr"];
+    $regisseur_id = $_POST["regisseur"];
     $bewertung = $_POST["bewertung"];
+    $selectedGenres  = explode(";",$_POST["genre"]);
 
     // execute prepare with SQL-statement
     $stmt = $pdo->prepare("insert into film(titel, erscheinungsjahr, regisseur_id, bewertung) VALUES (:titel, :erscheinungsjahr, :regisseur_id, :bewertung)");
 
     $stmt->bindParam(':titel', $titel);
-    $stmt->bindParam(':erscheinungsjahr', $erscheinungjahr);
-    $stmt->bindParam(':regisseur_id', $regisseur_id);
-    $stmt->bindParam(':bewertung', $bewertung);
+    $stmt->bindParam(':erscheinungsjahr', $erscheinungjahr, pdo::PARAM_INT);
+    $stmt->bindParam(':regisseur_id', $regisseur_id, pdo::PARAM_INT);
+    $stmt->bindParam(':bewertung', $bewertung, pdo::PARAM_INT);
 
-    #$stmt->execute();
+    $stmt->execute();
+    $filmID = $pdo->lastInsertId();
 
-    #header("LOCATION: ./index.php");
+    foreach ($selectedGenres as $genre) {
+        $stmt4 = $pdo->prepare("insert into h_film_genre (film_ID, genre_ID) VALUES (:filmID, :genreID)");
+
+        $genreID = intval($genre);
+
+        $stmt4->bindParam(':filmID', $filmID, PDO::PARAM_INT);
+        $stmt4->bindParam(':genreID', $genreID, PDO::PARAM_INT);
+
+        $stmt4->execute();
+    }
+
+   # header("LOCATION: ./index.php");
 }
 ?>
 
@@ -61,14 +72,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option class="option" value="">- Bitte Auswählen - </option>
                     <hr>
                     <?php foreach ($regisseurs as $regisseur):?>
-                        <option value="<?php echo $regisseur['name'];?>"><?php echo $regisseur['name'];?></option>
+                        <option value="<?php echo $regisseur['ID'];?>"><?php echo $regisseur['name'];?></option>
                     <?php endforeach?>
                 </select>
 
                 <label>Genre:</label>
                 <genre-selector>
                     <?php foreach ($genres as $genre):?>
-                        <option value="<?php echo $genre['name']; ?>"></option>
+                        <option value="<?php echo $genre['name']; ?>" id="<?php echo $genre['ID']?>"></option>
                     <?php endforeach;?>
                 </genre-selector>
 
@@ -77,6 +88,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <a href="index.php" class="back-btn">Back</a>
     </body>
-    <script src="multi-input.js"></script>
     <script src="genre_selector.js"></script>
 </html>

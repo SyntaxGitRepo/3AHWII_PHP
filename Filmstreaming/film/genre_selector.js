@@ -1,97 +1,143 @@
-class Genre_selector extends HTMLElement {
+class GenreSelector extends HTMLElement {
     constructor() {
         super();
     }
 
     connectedCallback() {
-        this.selected_div = document.createElement('div');
-        this.selected_div.classList.add('genre-selected-div');
-        this.selected_div.className = 'genre-selected-div';
-        this.appendChild(this.selected_div);
-
-        this.input = document.createElement('input');
-        this.input.type = 'text';
-        this.input.id = 'genre-selector-input';
-        this.input.name = 'genre-selector-input';
-        this.appendChild(this.input);
-
-        this.auto_fill_div = document.createElement('div');
-        this.auto_fill_div.className = 'auto-fill-div';
-        this.auto_fill_div.style.visibility = 'hidden';
-        this.auto_fill_div.id = "auto-fill-div";
-        this.appendChild(this.auto_fill_div);
-
-        this.activeDivIndex = 0;
-
-        this.input.addEventListener('input', (event) => {
-            this.auto_fill_div.style.visibility = 'visible';
-            this.auto_fill_div.innerHTML = "";
-
-            let inputText = this.input.value;
-
-            let children = this._getOptionChildren();
-            for (let i = 0; i < children.length; i++) {
-                if (children[i].value.substring(0, inputText.length).toLowerCase() === inputText.toLowerCase()) {
-                    let div = document.createElement('div');
-                    div.innerHTML = children[i].value;
-
-                    div.addEventListener('click', (event) => {
-                        let selectedDiv = document.createElement('div');
-                        selectedDiv.innerHTML = children[i].value;
-                        this.selected_div.appendChild(selectedDiv);
-
-                        selectedDiv.addEventListener('click', (e) => {
-                            this.selected_div.removeChild(selectedDiv);
-                        });
-
-                        this.hideAutoFillDiv();
-                        this.input.value = "";
-                    });
-
-                    this.auto_fill_div.appendChild(div);
-                }
-
-                if (i >= 6) break
-            }
-
-            if (this.auto_fill_div.children.length > 7) this.auto_fill_div.style.height = "175px";
-            else this.auto_fill_div.style.height = this.auto_fill_div.children.length * 25 + "px";
-        });
-
-        this.input.addEventListener('keydown', (e) => {
-
-            if (e.key === "ArrowUp") {
-                this.activeDivIndex--;
-            }
-            if (e.key === "ArrowDown") {
-                this.activeDivIndex++;
-            }
-//            this.auto_fill_div.children[this.activeDivIndex].className += "active";
-        });
+        this._createSubmissionInput();
+        this._createSelectedGenresDiv();
+        this._createAutoCompleteDiv();
+        this._createUserInput();
     }
 
-    _getOptionChildren() {
-        const rawChilds = this.children;
+    _getGenres() {
+        const children = this.children;
+        let genres = []
 
-        let children = []
-        for (let i = 0; i < rawChilds.length; i++) {
-            if (rawChilds[i].tagName.toLowerCase() === 'option') {
-                children.push(rawChilds[i]);
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].tagName.toLowerCase() === 'option') {
+                genres.push(children[i]);
             }
         }
 
-        return children
+        return genres
     }
 
-    hideAutoFillDiv() {
-        this.auto_fill_div.style.visibility = "hidden";
-        this.auto_fill_div.innerHTML = "";
+    hideAutoCompleteDiv() {
+        this.autoCompleteDiv.style.visibility = "hidden";
+        this.autoCompleteDiv.innerHTML = "";
+    }
+
+    _updateSubmissionInput() {
+        this.SubmissionInput.value = "";
+        let genresSelectedRaw = this.selectedGenresDiv.children;
+
+        for (let i = 0; i < genresSelectedRaw.length; i++) {
+            if (i !== 0) this.SubmissionInput.value += "; "
+
+            this.SubmissionInput.value += genresSelectedRaw[i].id;
+        }
+    }
+
+    _createSubmissionInput() {
+        this.SubmissionInput = document.createElement("input");
+        this.SubmissionInput.setAttribute("type", "hidden");
+        this.SubmissionInput.setAttribute("name", "genre");
+        this.SubmissionInput.setAttribute("value", "");
+        this.appendChild(this.SubmissionInput);
+    }
+
+    _createSelectedGenresDiv() {
+        this.selectedGenresDiv = document.createElement('div');
+        this.selectedGenresDiv.classList.add('selected-genres-div');
+        this.selectedGenresDiv.style.height = '0';
+        this.appendChild(this.selectedGenresDiv);
+    }
+
+    _createAutoCompleteDiv() {
+        this.autoCompleteDiv = document.createElement('div');
+        this.autoCompleteDiv.className = 'auto-complete-div';
+        this.autoCompleteDiv.setAttribute('id', 'auto-complete-div');
+        this.autoCompleteDiv.style.visibility = 'hidden';
+        this.autoCompleteDiv.style.top = '35px';
+        this.appendChild(this.autoCompleteDiv);
+    }
+
+    _createUserInput() {
+        this.userInput = document.createElement('input');
+        this.userInput.setAttribute('type', 'text');
+        this.userInput.addEventListener('input', (event) => {this._userInputChanged(event);});
+        this.appendChild(this.userInput);
+    }
+
+    _userInputChanged(event) {
+        this.autoCompleteDiv.style.visibility = 'visible';
+        this.autoCompleteDiv.innerHTML = '';
+
+        let inputText = this.userInput.value.toLowerCase().trim();
+        let genres = this._getGenres();
+        let numOfGenresDisplayed = 0;
+
+        for (let i = 0; i < genres.length; i++) {
+            let genre = genres[i];
+            let genreStartName = genre.value.substring(0, inputText.length).toLowerCase().trim();
+
+            if (inputText !== genreStartName) continue
+
+            let genreDiv = document.createElement('div');
+            genreDiv.innerHTML = genre.value;
+            genreDiv.id = genre.id;
+            genreDiv.addEventListener('click', (event) => {this._genreSelected(event);});
+            this.autoCompleteDiv.appendChild(genreDiv);
+
+            numOfGenresDisplayed++;
+            if (numOfGenresDisplayed > 6) break
+        }
+
+        if (this.autoCompleteDiv.children.length > 7) this.autoCompleteDiv.style.height = "175px";
+        else this.autoCompleteDiv.style.height = this.autoCompleteDiv.children.length * 25 + "px";
+    }
+
+    _genreSelected(event) {
+        let genreSelectedDiv = document.createElement("div");
+        genreSelectedDiv.innerHTML = event.target.innerText;
+        genreSelectedDiv.id = event.target.id;
+
+        this.selectedGenresDiv.style.height = '35px';
+        this.autoCompleteDiv.style.top = '70px';
+
+        let genreOptions = this.children;
+        for (let i = 0; i < genreOptions.length; i++) {
+            if (genreOptions[i].tagName.toLowerCase() !== 'option') continue;
+
+            if (genreOptions[i].value.trim() === event.target.innerText.trim()) {
+                this.removeChild(genreOptions[i]);
+            }
+        }
+
+        genreSelectedDiv.addEventListener('click', event => {
+            let genreOption = document.createElement('option');
+            genreOption.value = genreSelectedDiv.innerHTML;
+            genreOption.id = event.target.id;
+            this.selectedGenresDiv.removeChild(genreSelectedDiv);
+
+            this.selectedGenresDiv.style.height = '';
+            this.autoCompleteDiv.style.top = '35px';
+
+            this.appendChild(genreOption);
+            this._updateSubmissionInput()
+        });
+        this.selectedGenresDiv.appendChild(genreSelectedDiv);
+        this._updateSubmissionInput()
+
+        this.hideAutoCompleteDiv();
+        this.userInput.value = "";
     }
 }
 
 document.addEventListener('click', (event) => {
-    document.getElementById("auto-fill-div").style.visibility = "hidden";
-    document.getElementById("auto-fill-div").innerHTML = "";
+    document.getElementById("auto-complete-div").style.visibility = "hidden";
+    document.getElementById("auto-complete-div").innerHTML = "";
 });
 
-customElements.define('genre-selector', Genre_selector);
+customElements.define('genre-selector', GenreSelector);

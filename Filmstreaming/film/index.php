@@ -3,12 +3,24 @@
 require __DIR__ . "/../DBConnect/DBconnect.php";
 
 // execute prepare with SQL-statement
-$stmt = $pdo->prepare("SELECT * FROM film");
+$stmt = $pdo->prepare("SELECT
+    f.ID,
+    f.titel,
+    f.bewertung,
+    f.erscheinungsjahr,
+    r.name as regisseurName,
+    GROUP_CONCAT(g.name SEPARATOR ', ') as genreNames
+FROM film f
+LEFT JOIN filmstreaming.regisseur r on r.ID = f.regisseur_id
+LEFT JOIN filmstreaming.h_film_genre hfg on f.ID = hfg.film_ID
+LEFT JOIN filmstreaming.genre g on g.ID = hfg.genre_ID
+GROUP BY f.ID, f.titel, f.bewertung, f.erscheinungsjahr, r.name;");
 
 // execute SQL-statement
 $stmt->execute();
 
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 <!DOCTYPE html>
@@ -30,7 +42,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="../genre">Genre</a>
         </header>
         <h1>Film</h1>
-        <table>
+        <table style="width: 70%">
             <thead>
             <tr>
                 <th>ID</th>
@@ -38,7 +50,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <th>Erscheinungsjahr</th>
                 <th>Regisseur</th>
                 <th>Bewertung</th>
-                <th>Regisseur</th>
+                <th>Genres</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -49,7 +61,9 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $row['ID']; ?></td>
                     <td><?php echo $row['titel']; ?></td>
                     <td><?php echo $row['erscheinungsjahr']; ?></td>
+                    <td><?php echo $row['regisseurName']; ?></td>
                     <td><?php echo $row['bewertung']; ?></td>
+                    <td><?php echo $row['genreNames']; ?></td>
                     <td><a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn edit_btn">Edit</a></td>
                     <td><a href="delete.php?id=<?php echo $row['ID']; ?>" class="btn delete_btn">Delete</a></td>
                 </tr>

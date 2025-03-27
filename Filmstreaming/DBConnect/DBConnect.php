@@ -9,7 +9,7 @@
 
 
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=filmstreamingdb','root', '', [
+    $pdo = new PDO('mysql:host=localhost;dbname=filmstreaming','root', '', [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 } catch (PDOException $_) {
