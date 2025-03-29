@@ -1,13 +1,20 @@
 class GenreSelector extends HTMLElement {
+    static observedAttributes = ["edit"];
+
     constructor() {
         super();
     }
 
     connectedCallback() {
+        this._createAddGenreBtn();
         this._createSubmissionInput();
         this._createSelectedGenresDiv();
         this._createAutoCompleteDiv();
         this._createUserInput();
+        if (this.hasAttribute("edit")) {
+            this.autoCompleteDiv.style.top = "70px";
+            this.addGenreBtn.style.top = "42px";
+        }
     }
 
     _getGenres() {
@@ -51,6 +58,32 @@ class GenreSelector extends HTMLElement {
         this.selectedGenresDiv = document.createElement('div');
         this.selectedGenresDiv.classList.add('selected-genres-div');
         this.selectedGenresDiv.style.height = '0';
+
+        let genres = this._getGenres();
+
+        for (let genre of genres) {
+            if (!genre.selected) continue
+
+            let genreSelectedDiv = document.createElement("div");
+            genreSelectedDiv.innerHTML = genre.value;
+            genreSelectedDiv.id = genre.id;
+
+            this.selectedGenresDiv.style.height = '35px';
+
+            let genreOptions = this.children;
+            for (let i = 0; i < genreOptions.length; i++) {
+                if (genreOptions[i].tagName.toLowerCase() !== 'option') continue;
+
+                if (genreOptions[i].value.trim() === genre.value.trim()) {
+                    this.removeChild(genreOptions[i]);
+                }
+            }
+
+            genreSelectedDiv.addEventListener('click', event => {this._deselect(event, genreSelectedDiv)});
+            this.selectedGenresDiv.appendChild(genreSelectedDiv);
+            this._updateSubmissionInput()
+        }
+
         this.appendChild(this.selectedGenresDiv);
     }
 
@@ -60,6 +93,7 @@ class GenreSelector extends HTMLElement {
         this.autoCompleteDiv.setAttribute('id', 'auto-complete-div');
         this.autoCompleteDiv.style.visibility = 'hidden';
         this.autoCompleteDiv.style.top = '35px';
+        this.addGenreBtn.style.top = "7px";
         this.appendChild(this.autoCompleteDiv);
     }
 
@@ -87,6 +121,7 @@ class GenreSelector extends HTMLElement {
             let genreDiv = document.createElement('div');
             genreDiv.innerHTML = genre.value;
             genreDiv.id = genre.id;
+
             genreDiv.addEventListener('click', (event) => {this._genreSelected(event);});
             this.autoCompleteDiv.appendChild(genreDiv);
 
@@ -105,6 +140,7 @@ class GenreSelector extends HTMLElement {
 
         this.selectedGenresDiv.style.height = '35px';
         this.autoCompleteDiv.style.top = '70px';
+        this.addGenreBtn.style.top = "42px";
 
         let genreOptions = this.children;
         for (let i = 0; i < genreOptions.length; i++) {
@@ -115,23 +151,34 @@ class GenreSelector extends HTMLElement {
             }
         }
 
-        genreSelectedDiv.addEventListener('click', event => {
-            let genreOption = document.createElement('option');
-            genreOption.value = genreSelectedDiv.innerHTML;
-            genreOption.id = event.target.id;
-            this.selectedGenresDiv.removeChild(genreSelectedDiv);
-
-            this.selectedGenresDiv.style.height = '';
-            this.autoCompleteDiv.style.top = '35px';
-
-            this.appendChild(genreOption);
-            this._updateSubmissionInput()
-        });
+        genreSelectedDiv.addEventListener('click', event => {this._deselect(event, genreSelectedDiv)});
         this.selectedGenresDiv.appendChild(genreSelectedDiv);
         this._updateSubmissionInput()
 
         this.hideAutoCompleteDiv();
         this.userInput.value = "";
+    }
+
+    _deselect(event, genreSelectedDiv) {
+        let genreOption = document.createElement('option');
+        genreOption.value = genreSelectedDiv.innerHTML;
+        genreOption.id = event.target.id;
+        this.selectedGenresDiv.removeChild(genreSelectedDiv);
+
+        this.selectedGenresDiv.style.height = '';
+        this.autoCompleteDiv.style.top = '35px';
+        this.addGenreBtn.style.top = "7px";
+
+        this.appendChild(genreOption);
+        this._updateSubmissionInput()
+    }
+
+    _createAddGenreBtn() {
+        this.addGenreBtn = document.createElement("a");
+        this.addGenreBtn.setAttribute('href', "./../genre/insert.php?fromFilm=true");
+        this.addGenreBtn.classList.add("add-genre-btn");
+        this.addGenreBtn.innerHTML = "+";
+        this.appendChild(this.addGenreBtn);
     }
 }
 

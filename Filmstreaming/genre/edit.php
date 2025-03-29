@@ -5,21 +5,20 @@ require __DIR__ . "/../DBConnect/DBconnect.php";
 if (isset($_GET['id'])) {
     $id = (int) $_GET['id'];
 
-    $stmt = $pdo->prepare("SELECT * FROM genre WHERE id=:id");
+    $genreSelectStmt = $pdo->prepare("SELECT * FROM genre WHERE id=:id");
 
-    $stmt->bindParam(":id", $id);
-    $stmt->execute();
-    $genre = $stmt->fetch(PDO::FETCH_ASSOC);
+    $genreSelectStmt->bindParam(":id", $id);
+    $genreSelectStmt->execute();
+    $genre = $genreSelectStmt->fetch(PDO::FETCH_ASSOC);
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name= $_POST["name"];
 
-        $stmt2 = $pdo->prepare("UPDATE genre SET `name`=:name WHERE `ID`=:id");
+        $updateStmt = $pdo->prepare("UPDATE genre SET `name`=:name WHERE `ID`=:id");
 
-        //  $stmt2->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt2->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt2->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt2->execute();
+        $updateStmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $updateStmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $updateStmt->execute();
 
         header("LOCATION: ./index.php");
     }
@@ -40,6 +39,7 @@ if (isset($_GET['id'])) {
     <body>
         <h1>Edit Genre</h1>
         <div class="form-container">
+            <a href="index.php" class="back-btn">X</a>
             <form action="" method="POST">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required value="<?php echo $genre['name'];?>">
@@ -47,7 +47,6 @@ if (isset($_GET['id'])) {
                 <button type="submit">Edit Genre</button>
             </form>
         </div>
-        <a href="index.php" class="back-btn">Back</a>
     </body>
 </html>
 <?php

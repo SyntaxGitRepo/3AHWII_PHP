@@ -1,8 +1,11 @@
 body {
     font-family: 'Roboto', sans-serif;
     margin: 20px;
-    background-color: #f5f5f5;
     color: #333;
+    background-color: #000000;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%231c0f2e' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%232e1258' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%23401386' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%23510fb7' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%236200EA' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-size: cover;
 }
 
 table {
@@ -42,6 +45,7 @@ tr:hover {
     width: 40%;
     margin: 20px auto;
     padding: 20px;
+    padding-top: 30px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -167,33 +171,51 @@ h1 {
 
 .btn {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 15px;
     margin: 0 5px;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 500;
     text-align: center;
     text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.add_ski_btn {
-    display: block;
-    width: 200px;
-    padding: 10px;
-    margin: 20px auto;
-    text-align: center;
+    border-radius: 8px;
     background-color: #6200ea;
     color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .btn:hover {
     background-color: #3700b3;
+    border-color: #ffffff;
+    color: #fff;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.add_btn {
+    display: block;
+    width: 200px;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #6200ea;
+    color: #fff;
+    text-decoration: none;
+    border: 2px solid #bb86fc;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+.add_btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    color: white;
 }
 
 .delete_btn {
@@ -216,13 +238,15 @@ h1 {
 }
 
 .back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    padding: 10px;
+    position: relative;
+    float: right;
+    top: -15px;
+    padding: 12px;
+    height: 12px;
+    width: 10px;
     background-color: #6200ea;  /* Same color as the submit button */
     color: #fff;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
     text-align: center;
     border: none;
@@ -238,7 +262,7 @@ h1 {
 }
 
 header {
-    background-color: #6200ea;;
+    background-color: #6200ea;
     padding: 15px;
     text-align: center;
     display: flex;
@@ -261,20 +285,37 @@ header a:hover {
     background-color: #3700b3;
 }
 
-.active {
+.activeBtn {
     border-bottom:  solid 6px;
     background-color: #3700b3;
 }
 
-.active::after {
+.activeBtn::after {
     content: '';
     display: block;
-    visibility: hidden;
     width: 100%;
     height: 4px;
-    background-color: #ffcc00;
     position: absolute;
     bottom: -6px;
     left: 0;
     border-radius: 2px;
+}
+
+.add-genre-btn {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    background-color: #6200ea;
+    color: #fff;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }

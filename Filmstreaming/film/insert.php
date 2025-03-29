@@ -1,13 +1,13 @@
 <?php
 require __DIR__ . "/../DBConnect/DBconnect.php";
 
-$stmt2 = $pdo->prepare("SELECT * FROM regisseur");
-$stmt2->execute();
-$regisseurs = $stmt2->fetchAll(PDO::FETCH_ASSOC);
+$regisseurSelectStmt = $pdo->prepare("SELECT * FROM regisseur");
+$regisseurSelectStmt->execute();
+$regisseurs = $regisseurSelectStmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt3 = $pdo->prepare("SELECT * FROM genre");
-$stmt3->execute();
-$genres = $stmt3->fetchAll(PDO::FETCH_ASSOC);
+$genreSelectStmt = $pdo->prepare("SELECT * FROM genre");
+$genreSelectStmt->execute();
+$genres = $genreSelectStmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titel = $_POST["titel"];
@@ -17,28 +17,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $selectedGenres  = explode(";",$_POST["genre"]);
 
     // execute prepare with SQL-statement
-    $stmt = $pdo->prepare("insert into film(titel, erscheinungsjahr, regisseur_id, bewertung) VALUES (:titel, :erscheinungsjahr, :regisseur_id, :bewertung)");
+    $insertStmt = $pdo->prepare("insert into film(titel, erscheinungsjahr, regisseur_id, bewertung) VALUES (:titel, :erscheinungsjahr, :regisseur_id, :bewertung)");
 
-    $stmt->bindParam(':titel', $titel);
-    $stmt->bindParam(':erscheinungsjahr', $erscheinungjahr, pdo::PARAM_INT);
-    $stmt->bindParam(':regisseur_id', $regisseur_id, pdo::PARAM_INT);
-    $stmt->bindParam(':bewertung', $bewertung, pdo::PARAM_INT);
+    $insertStmt->bindParam(':titel', $titel);
+    $insertStmt->bindParam(':erscheinungsjahr', $erscheinungjahr, pdo::PARAM_INT);
+    $insertStmt->bindParam(':regisseur_id', $regisseur_id, pdo::PARAM_INT);
+    $insertStmt->bindParam(':bewertung', $bewertung, pdo::PARAM_INT);
 
-    $stmt->execute();
+    $insertStmt->execute();
     $filmID = $pdo->lastInsertId();
 
     foreach ($selectedGenres as $genre) {
-        $stmt4 = $pdo->prepare("insert into h_film_genre (film_ID, genre_ID) VALUES (:filmID, :genreID)");
+        $genreInsertStmt = $pdo->prepare("insert into h_film_genre (film_ID, genre_ID) VALUES (:filmID, :genreID)");
 
         $genreID = intval($genre);
 
-        $stmt4->bindParam(':filmID', $filmID, PDO::PARAM_INT);
-        $stmt4->bindParam(':genreID', $genreID, PDO::PARAM_INT);
+        $genreInsertStmt->bindParam(':filmID', $filmID, PDO::PARAM_INT);
+        $genreInsertStmt->bindParam(':genreID', $genreID, PDO::PARAM_INT);
 
-        $stmt4->execute();
+        $genreInsertStmt->execute();
     }
 
-   # header("LOCATION: ./index.php");
+    header("LOCATION: ./index.php");
 }
 ?>
 
@@ -56,8 +56,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
         <h1>Insert New Film</h1>
         <div class="form-container">
-            <form action="" method="POST">
+            <a href="index.php" class="back-btn">X</a>
 
+            <form action="" method="POST">
                 <label for="titel">Titel:</label>
                 <input type="text" id="titel" name="titel" required>
 
@@ -86,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit">Add Film</button>
             </form>
         </div>
-        <a href="index.php" class="back-btn">Back</a>
     </body>
     <script src="genre_selector.js"></script>
 </html>

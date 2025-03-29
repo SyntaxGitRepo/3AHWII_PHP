@@ -3,12 +3,20 @@
 require __DIR__ . "/../DBConnect/DBconnect.php";
 
 // execute prepare with SQL-statement
-$stmt = $pdo->prepare("SELECT * FROM regisseur");
+$selectStmt = $pdo->prepare("SELECT * FROM regisseur");
 
 // execute SQL-statement
-$stmt->execute();
+$selectStmt->execute();
 
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $selectStmt->fetchAll(PDO::FETCH_ASSOC);
+
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
+    if (in_array("valid", $_GET)) {
+        if ($_GET["valid"] === "false") {
+            echo "<script>alert('You can not delete a regisseur who is registered to a film!');</script>";
+        }
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -26,7 +34,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <header>
             <a href="../"">Home</a>
             <a href="../film">Film</a>
-            <a href="../regisseur"  class="active">Regisseur</a>
+            <a href="../regisseur"  class="activeBtn">Regisseur</a>
             <a href="../genre">Genre</a>
         </header>
 
@@ -55,7 +63,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
             </tbody>
         </table>
-        <a href="insert.php" class="add_ski_btn">Add Regisseur</a>
+        <a href="insert.php" class="add_btn">Add Regisseur</a>
     </body>
 </html>
 

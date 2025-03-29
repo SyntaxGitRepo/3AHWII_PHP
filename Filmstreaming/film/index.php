@@ -2,8 +2,7 @@
 
 require __DIR__ . "/../DBConnect/DBconnect.php";
 
-// execute prepare with SQL-statement
-$stmt = $pdo->prepare("SELECT
+$selectStmt = $pdo->prepare("SELECT
     f.ID,
     f.titel,
     f.bewertung,
@@ -11,15 +10,14 @@ $stmt = $pdo->prepare("SELECT
     r.name as regisseurName,
     GROUP_CONCAT(g.name SEPARATOR ', ') as genreNames
 FROM film f
-LEFT JOIN filmstreaming.regisseur r on r.ID = f.regisseur_id
-LEFT JOIN filmstreaming.h_film_genre hfg on f.ID = hfg.film_ID
-LEFT JOIN filmstreaming.genre g on g.ID = hfg.genre_ID
+LEFT JOIN regisseur r on r.ID = f.regisseur_id
+LEFT JOIN h_film_genre hfg on f.ID = hfg.film_ID
+LEFT JOIN genre g on g.ID = hfg.genre_ID
 GROUP BY f.ID, f.titel, f.bewertung, f.erscheinungsjahr, r.name;");
 
-// execute SQL-statement
-$stmt->execute();
+$selectStmt->execute();
 
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $selectStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 ?>
@@ -37,7 +35,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <body>
         <header>
             <a href="../"">Home</a>
-            <a href="../film" class="active">Film</a>
+            <a href="../film" class="activeBtn">Film</a>
             <a href="../regisseur">Regisseur</a>
             <a href="../genre">Genre</a>
         </header>
@@ -70,7 +68,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
             </tbody>
         </table>
-        <a href="insert.php" class="add_ski_btn">Add Film</a>
+        <a href="insert.php" class="add_btn">Add Film</a>
     </body>
 </html>
 

@@ -7,13 +7,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nationalitaet = $_POST["nationalitaet"];
 
     // execute prepare with SQL-statement
-    $stmt = $pdo->prepare("insert into regisseur (name, geburtsjahr, nationalitaet) VALUES (:name, :geburtsjahr, :nationaltaet);");
+    $insertStmt = $pdo->prepare("insert into regisseur (name, geburtsjahr, nationalitaet) VALUES (:name, :geburtsjahr, :nationaltaet);");
 
-    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':geburtsjahr', $geburtsjahr, PDO::PARAM_INT);
-    $stmt->bindParam(':nationaltaet', $nationalitaet, PDO::PARAM_STR);
+    $insertStmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $insertStmt->bindParam(':geburtsjahr', $geburtsjahr, PDO::PARAM_INT);
+    $insertStmt->bindParam(':nationaltaet', $nationalitaet, PDO::PARAM_STR);
 
-    $stmt->execute();
+    $insertStmt->execute();
 
     header("LOCATION: ./index.php");
 }
@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <body>
     <h1>Insert New Regisseur</h1>
     <div class="form-container">
+        <a href="index.php" class="back-btn">X</a>
         <form action="" method="POST">
 
             <label for="name">Name:</label>
@@ -47,7 +48,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Add Regisseur</button>
         </form>
     </div>
-    <a href="index.php" class="back-btn">Back</a>
     </body>
-    </html>
-<?php
+</html>

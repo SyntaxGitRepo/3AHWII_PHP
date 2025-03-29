@@ -16,14 +16,14 @@ if (isset($_GET['id'])) {
         $geburtsjahr = (int) $_POST["geburtsjahr"];
         $nationalitaet = $_POST["nationalitaet"];
 
-        $stmt2 = $pdo->prepare("UPDATE regisseur SET `name`=:name, `geburtsjahr`=:geburtsjahr, `nationalitaet`=:nationalitaet  WHERE `ID`=:id");
+        $updateStmt = $pdo->prepare("UPDATE regisseur SET `name`=:name, `geburtsjahr`=:geburtsjahr, `nationalitaet`=:nationalitaet  WHERE `ID`=:id");
 
         //  $stmt2->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt2->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt2->bindParam(':name', $name, PDO::PARAM_STR);
-        $stmt2->bindParam(':geburtsjahr', $geburtsjahr, PDO::PARAM_INT);
-        $stmt2->bindParam(':nationalitaet', $nationalitaet, PDO::PARAM_STR);
-        $stmt2->execute();
+        $updateStmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $updateStmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $updateStmt->bindParam(':geburtsjahr', $geburtsjahr, PDO::PARAM_INT);
+        $updateStmt->bindParam(':nationalitaet', $nationalitaet, PDO::PARAM_STR);
+        $updateStmt->execute();
 
         header("LOCATION: ./index.php");
     }
@@ -45,6 +45,7 @@ if (isset($_GET['id'])) {
     <body>
         <h1>Edit Regisseur</h1>
         <div class="form-container">
+            <a href="index.php" class="back-btn">X</a>
             <form action="" method="POST">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required value="<?php echo $regisseur['name'];?>">
@@ -58,7 +59,6 @@ if (isset($_GET['id'])) {
                 <button type="submit">Edit Regisseur</button>
             </form>
         </div>
-        <a href="index.php" class="back-btn">Back</a>
     </body>
     </html>
 <?php

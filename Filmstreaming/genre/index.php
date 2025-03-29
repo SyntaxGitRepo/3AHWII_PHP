@@ -2,13 +2,11 @@
 
 require __DIR__ . "/../DBConnect/DBconnect.php";
 
-// execute prepare with SQL-statement
-$stmt = $pdo->prepare("SELECT * FROM genre");
+$selectStmt = $pdo->prepare("SELECT * FROM genre");
 
-// execute SQL-statement
-$stmt->execute();
+$selectStmt->execute();
 
-$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $selectStmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
@@ -27,10 +25,10 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="../"">Home</a>
             <a href="../film">Film</a>
             <a href="../regisseur">Regisseur</a>
-            <a href="../genre" class="active">Genre</a>
+            <a href="../genre" class="activeBtn">Genre</a>
         </header>
         <h1>Genre</h1>
-        <table>
+        <table style="width:35%">
             <thead>
             <tr>
                 <th>ID</th>
@@ -41,16 +39,16 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </thead>
             <tbody>
             <?php foreach ($result as $row): ?>
-                <tr>
-                    <td><?php echo $row['ID']; ?></td>
-                    <td><?php echo $row['name']; ?></td>
-                    <td><a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn edit_btn">Edit</a></td>
-                    <td><a href="delete.php?id=<?php echo $row['ID']; ?>" class="btn delete_btn">Delete</a></td>
-                </tr>
-            <?php endforeach; ?>
+                    <tr>
+                        <td><?php echo $row['ID']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <td><a href="edit.php?id=<?php echo $row['ID']; ?>" class="btn edit_btn">Edit</a></td>
+                        <td><a href="delete.php?id=<?php echo $row['ID']; ?>" class="btn delete_btn">Delete</a></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
-        <a href="insert.php" class="add_ski_btn">Add Genre</a>
+        <a href="insert.php" class="add_btn">Add Genre</a>
     </body>
 </html>
 
